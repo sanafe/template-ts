@@ -12,7 +12,7 @@ export class ClockView {
   constructor(elementId: string) {
     this.elementId = elementId;
     this.createClockElement();
-    this.createButtonsElement();
+    this.createButtons();
   }
 
   updateTimeInElement(timeString: string) {
@@ -37,46 +37,59 @@ export class ClockView {
     const mainContainer = document.querySelector("#main-container");
     mainContainer.appendChild(this.container);
   }
-  createButtonsElement() {
-    this.timeElement = document.createElement("div");
-    this.container.appendChild(this.timeElement);
-    const buttons = document.createElement("div");
-    this.container.appendChild(buttons);
+  private createButton(text: string, clickHandler: () => void): HTMLButtonElement {
+    const button = document.createElement("button");
+    button.textContent = text;
+    button.addEventListener("click", clickHandler);
+    return button;
+  }
 
-    const modeButton = document.createElement("button");
-    const toggleHour12Button = document.createElement("button");
-    this.incrementButton = document.createElement("button");
-    const toggleTheme = document.createElement("button");
-    const resetButton = document.createElement("button");
-    resetButton.addEventListener("click",()=>{
-      console.log("reset button clicked!")
-      this.controller.handleResetTime();
-    });
-    toggleHour12Button.textContent = "Toggle format";
-    toggleTheme.textContent = "Toggle Theme";
-    resetButton.textContent="Reset"
-    toggleTheme.addEventListener("click", () => {
-      console.log("theme clicked");
-      this.controller.handleToggleTheme();
-    });
-    toggleTheme.classList.add("light-off");
-    this.incrementButton.setAttribute("disabled", "");
-    modeButton.textContent = "Mode";
-    this.incrementButton.textContent = "Increment";
-    modeButton.addEventListener("click", () => {
+  private createModeButton(): void {
+    const modeButton = this.createButton("Mode", () => {
       this.controller.handleModeClicked();
     });
-    this.incrementButton.addEventListener("click", () => {
+    this.container.appendChild(modeButton);
+  }
+
+  private createIncrementButton(): void {
+    this.incrementButton = this.createButton("Increment", () => {
       this.controller.handleIncrement();
     });
-    toggleHour12Button.addEventListener("click", () => {
+    this.incrementButton.setAttribute("disabled", "");
+    this.container.appendChild(this.incrementButton);
+  }
+
+  private createToggleThemeButton(): void {
+    const toggleThemeButton = this.createButton("Toggle Theme", () => {
+      this.controller.handleToggleTheme();
+    });
+    toggleThemeButton.classList.add("light-off");
+    this.container.appendChild(toggleThemeButton);
+  }
+
+  private createResetButton(): void {
+    const resetButton = this.createButton("Reset", () => {
+      this.controller.handleResetTime();
+    });
+    this.container.appendChild(resetButton);
+  }
+
+  private createToggleHour12Button(): void {
+    const toggleHour12Button = this.createButton("Toggle Format", () => {
       this.controller.handleToggleHour12Format();
     });
-    buttons.appendChild(modeButton);
-    buttons.appendChild(this.incrementButton);
-    buttons.appendChild(toggleTheme);
-    buttons.appendChild(resetButton);
-    buttons.appendChild(toggleHour12Button);
+    this.container.appendChild(toggleHour12Button);
+  }
+
+  private createButtons(): void {
+    this.timeElement = document.createElement("div");
+    this.container.appendChild(this.timeElement);
+
+    this.createModeButton();
+    this.createIncrementButton();
+    this.createToggleThemeButton();
+    this.createResetButton();
+    this.createToggleHour12Button();
   }
 
   changeIncrementButton(mode: 0 | 1 | 2) {
