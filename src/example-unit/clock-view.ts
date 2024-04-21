@@ -1,14 +1,16 @@
+import { Clock } from "./clock";
 import { ClockController } from "./clock-controller";
 
 // Define the ClockView class for managing the UI
 export class ClockView {
 
   private elementId: string = "clock";
-  private viewController: ClockController;
+  private controller: ClockController;
 
   constructor() {
     this.createClockElement();
     this.createButtonsElement();
+    this.controller = new ClockController(this);
   }
 
   updateTimeInElement(timeString: string) { // Explicitly specifying the type as string
@@ -33,6 +35,8 @@ export class ClockView {
     mode.addEventListener('click', () => {
       // This function will be called when the button is clicked
       console.log('Button clicked!');
+      this.controller.handleModeClicked();
+
     });
     buttons.appendChild(mode);
   }

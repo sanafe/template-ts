@@ -28,4 +28,11 @@ export class Clock {
   setMode(mode: 0 | 1 | 2 ) {
     this.mode=mode;
   }
+  changeMode(): void {
+    this.mode++;
+    if (this.mode>2){
+      this.mode=0;
+    }
+    console.log(this.mode);
+  }
 }
