@@ -7,7 +7,7 @@ export class Clock {
   private time: Date;
   private mode: 0 | 1 | 2;
   private light: boolean;
-  private timeZoneOffset: number = 0; // default to UTC
+  private timeZoneOffset: number = 2; // default to UTC+2 Paris Time
   private timer: NodeJS.Timer;
   private hour12Format: boolean;
 

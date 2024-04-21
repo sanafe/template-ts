@@ -45,7 +45,7 @@ timeZones.forEach(timeZone => {
 });
 
 container.appendChild(timeZoneSelect);
-
+timeZoneSelect.selectedIndex = 12;
 // Create a button to add clocks
 const addButton = document.createElement("button");
 addButton.textContent = "Add Clock";
