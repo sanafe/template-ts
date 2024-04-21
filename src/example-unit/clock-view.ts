@@ -5,18 +5,21 @@ import "../index.css"
 // Define the ClockView class for managing the UI
 export class ClockView {
 
-  private elementId: string = "clock";
+  private elementId: string;
   private controller: ClockController;
   private incrementButton: HTMLElement ;
 
-  constructor() {
+  constructor(elementId: string) {
+    this.elementId = elementId;
     this.createClockElement();
     this.createButtonsElement();
-    this.controller = new ClockController(this);
   }
 
   updateTimeInElement(timeString: string) { // Explicitly specifying the type as string
-    document.getElementById(this.elementId).textContent = timeString;
+    const element = document.getElementById(this.elementId);
+    if (element){
+      element.textContent = timeString;
+    }
   }
 
   displayTime(time: Date) { 
@@ -85,5 +88,15 @@ export class ClockView {
       element.classList.remove("light-on");
       element.classList.add("light-off");
     }
+  }
+  setId(id: string): void {
+    this.elementId = id;
+    const div = document.getElementById(this.elementId);
+    if (div) {
+        div.setAttribute("id", this.elementId);
+    }
+  }
+  setController(controller: ClockController): void {
+    this.controller = controller;
   }
 }

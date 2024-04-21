@@ -7,24 +7,39 @@ export class Clock {
   private clockView: ClockView;
   private time: Date;
   private mode: 0 | 1 | 2;
-  private modes:string[];
   private light:boolean;
+  private timeZoneOffset: number = 0; // default to UTC
+  private timer: NodeJS.Timer;
+
 
   constructor(clockView: ClockView) {
     this.clockView = clockView;
-    this.setTime(new Date());
+    this.setTimeZone(this.timeZoneOffset); // Initialize with default time zone
     this.mode=0;
-    this.modes = ['inactive', 'increaseMinutes', 'increaseHours'];
+    this.timer = null;
+    this.setTime(new Date());
   }
 
   setTime(time: Date): void {
     this.time = time;
+
+    if (this.timer !== null) {
+      clearInterval(this.timer);
+      this.timer = null;
+    }
     // Update time every second
-    setInterval(() => {
-      this.time = new Date(this.time);
-      this.time.setSeconds(this.time.getSeconds() + 1);
-      this.clockView.displayTime(this.time);
-    }, 1000);
+    if (this.timer === null) {
+      this.timer = setInterval(() => {
+        this.time = new Date(this.time);
+        this.time.setSeconds(this.time.getSeconds() + 1);
+        this.clockView.displayTime(this.time);
+      }, 1000);
+    }
+  }
+  setTimeZone(offset: number): void {
+    this.timeZoneOffset = offset;
+    // Here you would add logic to adjust the current time based on the new time zone
+    console.log(`Time zone set to UTC${offset >= 0 ? '+' : ''}${offset}`);
   }
     changeMode(): void {
       this.mode++;
@@ -35,12 +50,17 @@ export class Clock {
       this.clockView.changeIncrementButton(this.mode as 0 | 1 | 2 );
     }
     increment(): void {
+      console.log('Increment method', this.mode);
+      console.log('time0 : ', this.time.getHours(), ':', this.time.getMinutes());
+
       if (this.mode===1) {
         this.incrementHour();
       }
       if (this.mode===2) {
         this.incrementMinute();
       }
+      console.log('time1: ', this.time.getHours(), ':', this.time.getMinutes());
+      this.setTime(this.time);
     }
     incrementHour(): void {
       this.time.setHours(this.time.getHours() + 1);

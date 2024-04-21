@@ -1,4 +1,5 @@
-import {Clock, ClockView} from './example-unit';
+import { ClockManager } from './example-unit/clock-manager';
 
-const clockView = new ClockView();
+const clockManager = new ClockManager();
+clockManager.createClock(0);
 
