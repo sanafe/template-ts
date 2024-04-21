@@ -41,7 +41,13 @@ export class ClockView {
     const modeButton = document.createElement("button");
     this.incrementButton = document.createElement("button");
     const toggleTheme = document.createElement("button");
+    const resetButton = document.createElement("button");
+    resetButton.addEventListener("click",()=>{
+      console.log("reset button clicked!")
+      this.controller.handleResetTime();
+    });
     toggleTheme.textContent = "Toggle Theme";
+    resetButton.textContent="Reset"
     toggleTheme.addEventListener("click", () => {
       console.log("theme clicked");
       this.controller.handleToggleTheme();
@@ -59,6 +65,7 @@ export class ClockView {
     buttons.appendChild(modeButton);
     buttons.appendChild(this.incrementButton);
     buttons.appendChild(toggleTheme);
+    buttons.appendChild(resetButton);
   }
 
   changeIncrementButton(mode: 0 | 1 | 2) {

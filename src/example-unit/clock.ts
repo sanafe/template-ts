@@ -71,4 +71,8 @@ export class Clock {
     this.light = !this.light;
     this.clockView.toggleTheme(this.light);
   }
+  resetTime(): void {
+    this.time = new Date();
+    this.setTimeZone(this.timeZoneOffset);
+  }
 }

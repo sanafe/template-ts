@@ -16,4 +16,7 @@ export class ClockController {
   handleToggleTheme() {
     this.clock.toggleTheme();
   }
+  handleResetTime() {
+    this.clock.resetTime();
+  }
 }
