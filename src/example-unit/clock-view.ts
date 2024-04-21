@@ -6,6 +6,7 @@ export class ClockView {
 
   private elementId: string = "clock";
   private controller: ClockController;
+  private incrementButton: HTMLElement ;
 
   constructor() {
     this.createClockElement();
@@ -30,17 +31,38 @@ export class ClockView {
   createButtonsElement(){
     const buttons = document.querySelector("#buttons");
     const mode=document.createElement("button");
+    this.incrementButton=document.createElement("button");
     mode.setAttribute("id", "mode");
+    this.incrementButton.setAttribute("id", "increment");
+    this.incrementButton.setAttribute("disabled", "");
     mode.textContent = 'Mode';
+    this.incrementButton.textContent='Increment';
     mode.addEventListener('click', () => {
       // This function will be called when the button is clicked
       console.log('Button clicked!');
       this.controller.handleModeClicked();
-
+    });
+    this.incrementButton.addEventListener('click',()=>{
+      console.log('increment clicked!');
     });
     buttons.appendChild(mode);
+    buttons.appendChild(this.incrementButton);
   }
 
-
-
+  changeIncrementButton(mode:0 | 1 | 2){
+    if (mode !== 0){
+      this.incrementButton.removeAttribute("disabled");
+    }
+    if (mode == 1){
+      this.incrementButton.textContent='Increment Minute';
+    }
+    if (mode == 2){
+      this.incrementButton.textContent='Increment Hour';
+    }
+    if (mode == 0){
+      this.incrementButton.textContent='Increment';
+      this.incrementButton.setAttribute("disabled", "");
+    }
+    
+  }
 }

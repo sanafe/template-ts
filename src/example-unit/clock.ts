@@ -12,7 +12,7 @@ export class Clock {
   constructor(clockView: ClockView) {
     this.clockView = clockView;
     this.setTime(new Date());
-    this.setMode(0);
+    this.mode=0;
     this.modes = ['inactive', 'increaseMinutes', 'increaseHours'];
   }
 
@@ -25,14 +25,12 @@ export class Clock {
       this.clockView.displayTime(this.time);
     }, 1000);
   }
-  setMode(mode: 0 | 1 | 2 ) {
-    this.mode=mode;
-  }
   changeMode(): void {
     this.mode++;
     if (this.mode>2){
       this.mode=0;
     }
     console.log(this.mode);
+    this.clockView.changeIncrementButton(this.mode as 0 | 1 | 2 );
   }
 }
