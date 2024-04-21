@@ -25,12 +25,27 @@ export class Clock {
       this.clockView.displayTime(this.time);
     }, 1000);
   }
-  changeMode(): void {
-    this.mode++;
-    if (this.mode>2){
-      this.mode=0;
+    changeMode(): void {
+      this.mode++;
+      if (this.mode>2){
+        this.mode=0;
+      }
+      console.log(this.mode);
+      this.clockView.changeIncrementButton(this.mode as 0 | 1 | 2 );
     }
-    console.log(this.mode);
-    this.clockView.changeIncrementButton(this.mode as 0 | 1 | 2 );
-  }
+    increment(): void {
+      if (this.mode===1) {
+        this.incrementHour();
+      }
+      if (this.mode===2) {
+        this.incrementMinute();
+      }
+    }
+    incrementHour(): void {
+      this.time.setHours(this.time.getHours() + 1);
+    }
+  
+    incrementMinute(): void {
+      this.time.setMinutes(this.time.getMinutes() + 1);
+    }
 }

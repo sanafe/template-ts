@@ -13,4 +13,7 @@ export class ClockController {
   handleModeClicked(){
     this.clock.changeMode();
 }
+handleIncrement(){
+  this.clock.increment();
+};
 }

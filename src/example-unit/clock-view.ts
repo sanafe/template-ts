@@ -44,6 +44,7 @@ export class ClockView {
     });
     this.incrementButton.addEventListener('click',()=>{
       console.log('increment clicked!');
+      this.controller.handleIncrement();
     });
     buttons.appendChild(mode);
     buttons.appendChild(this.incrementButton);
