@@ -1,5 +1,6 @@
 import { Clock } from "./clock";
 import { ClockController } from "./clock-controller";
+import "../index.css"
 
 // Define the ClockView class for managing the UI
 export class ClockView {
@@ -32,6 +33,14 @@ export class ClockView {
     const buttons = document.querySelector("#buttons");
     const mode=document.createElement("button");
     this.incrementButton=document.createElement("button");
+    const toggleTheme = document.createElement("button");
+    toggleTheme.setAttribute("id", "toggleTheme");
+    toggleTheme.textContent = "Toggle Theme";
+    toggleTheme.addEventListener("click",()=>{
+      console.log("theme clicked");
+      this.controller.handleToggleTheme();
+    });
+    toggleTheme.classList.add("light-off");
     mode.setAttribute("id", "mode");
     this.incrementButton.setAttribute("id", "increment");
     this.incrementButton.setAttribute("disabled", "");
@@ -48,6 +57,7 @@ export class ClockView {
     });
     buttons.appendChild(mode);
     buttons.appendChild(this.incrementButton);
+    buttons.appendChild(toggleTheme);
   }
 
   changeIncrementButton(mode:0 | 1 | 2){
@@ -55,15 +65,25 @@ export class ClockView {
       this.incrementButton.removeAttribute("disabled");
     }
     if (mode == 1){
-      this.incrementButton.textContent='Increment Minute';
+      this.incrementButton.textContent='Increment Hour';
     }
     if (mode == 2){
-      this.incrementButton.textContent='Increment Hour';
+      this.incrementButton.textContent='Increment Minute';
     }
     if (mode == 0){
       this.incrementButton.textContent='Increment';
       this.incrementButton.setAttribute("disabled", "");
     }
-    
+  }
+  toggleTheme(light:boolean):void{
+    const element = document.getElementById(this.elementId);
+    if (light){
+      element.classList.remove("light-off");
+      element.classList.add("light-on");
+    }
+    else{
+      element.classList.remove("light-on");
+      element.classList.add("light-off");
+    }
   }
 }

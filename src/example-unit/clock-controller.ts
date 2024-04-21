@@ -16,4 +16,7 @@ export class ClockController {
 handleIncrement(){
   this.clock.increment();
 };
+handleToggleTheme(){
+  this.clock.toggleTheme();
+};
 }

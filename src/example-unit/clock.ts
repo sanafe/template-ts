@@ -8,6 +8,7 @@ export class Clock {
   private time: Date;
   private mode: 0 | 1 | 2;
   private modes:string[];
+  private light:boolean;
 
   constructor(clockView: ClockView) {
     this.clockView = clockView;
@@ -47,5 +48,9 @@ export class Clock {
   
     incrementMinute(): void {
       this.time.setMinutes(this.time.getMinutes() + 1);
+    }
+    toggleTheme(): void {
+      this.light = !this.light;
+      this.clockView.toggleTheme(this.light);
     }
 }

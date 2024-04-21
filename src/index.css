@@ -1,5 +1,13 @@
 body{
 	font:15px/1.3 Arial, sans-serif;
-	color: #4f4f4f;
+	color: red;
 	z-index:1;
+}
+
+.light-on {
+  color: blue;
+}
+
+.light-off {
+  color: brown;
 }
