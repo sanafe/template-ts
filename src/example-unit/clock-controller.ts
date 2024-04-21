@@ -19,4 +19,7 @@ export class ClockController {
   handleResetTime() {
     this.clock.resetTime();
   }
+  handleToggleHour12Format() {
+    this.clock.toggleHour12Format();
+  }
 }

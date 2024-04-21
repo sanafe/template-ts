@@ -22,8 +22,13 @@ export class ClockView {
     }
   }
 
-  displayTime(time: Date) {
-    this.updateTimeInElement(time.toLocaleTimeString());
+  displayTime(time: Date, hour12Format: boolean = true) {
+    this.updateTimeInElement(time.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: hour12Format 
+    }));
   }
 
   createClockElement() {
@@ -39,6 +44,7 @@ export class ClockView {
     this.container.appendChild(buttons);
 
     const modeButton = document.createElement("button");
+    const toggleHour12Button = document.createElement("button");
     this.incrementButton = document.createElement("button");
     const toggleTheme = document.createElement("button");
     const resetButton = document.createElement("button");
@@ -46,6 +52,7 @@ export class ClockView {
       console.log("reset button clicked!")
       this.controller.handleResetTime();
     });
+    toggleHour12Button.textContent = "Toggle format";
     toggleTheme.textContent = "Toggle Theme";
     resetButton.textContent="Reset"
     toggleTheme.addEventListener("click", () => {
@@ -62,10 +69,14 @@ export class ClockView {
     this.incrementButton.addEventListener("click", () => {
       this.controller.handleIncrement();
     });
+    toggleHour12Button.addEventListener("click", () => {
+      this.controller.handleToggleHour12Format();
+    });
     buttons.appendChild(modeButton);
     buttons.appendChild(this.incrementButton);
     buttons.appendChild(toggleTheme);
     buttons.appendChild(resetButton);
+    buttons.appendChild(toggleHour12Button);
   }
 
   changeIncrementButton(mode: 0 | 1 | 2) {

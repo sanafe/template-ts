@@ -9,11 +9,13 @@ export class Clock {
   private light: boolean;
   private timeZoneOffset: number = 0; // default to UTC
   private timer: NodeJS.Timer;
+  private hour12Format: boolean;
 
   constructor(clockView: ClockView) {
     this.clockView = clockView;
     this.mode = 0;
     this.timer = null;
+    this.hour12Format = true; // AM / PM 
     this.setTime(new Date());
     this.setTimeZone(this.timeZoneOffset);
   }
@@ -30,7 +32,7 @@ export class Clock {
       this.timer = setInterval(() => {
         this.time = new Date(this.time);
         this.time.setSeconds(this.time.getSeconds() + 1);
-        this.clockView.displayTime(this.time);
+        this.clockView.displayTime(this.time, this.hour12Format);
       }, 1000);
     }
   }
@@ -40,7 +42,7 @@ export class Clock {
     this.timeZoneOffset = offset; // Update the stored time zone offset
     // Update the current time by adding the offset difference
     this.time = new Date(this.time.getTime() + offsetDifference * 60000); // 60000 ms per minute
-    this.clockView.displayTime(this.time);
+    this.clockView.displayTime(this.time, this.hour12Format);
     console.log(`Time zone set to UTC${offset >= 0 ? "+" : ""}${offset}, current time updated.`);
   }
   changeMode(): void {
@@ -74,5 +76,9 @@ export class Clock {
   resetTime(): void {
     this.time = new Date();
     this.setTimeZone(this.timeZoneOffset);
+  }
+  toggleHour12Format(): void {
+    this.hour12Format = !this.hour12Format;
+    this.clockView.displayTime(this.time, this.hour12Format);
   }
 }
