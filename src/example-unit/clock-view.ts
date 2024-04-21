@@ -1,13 +1,13 @@
-import { Clock } from "./clock";
 import { ClockController } from "./clock-controller";
-import "../index.css"
+import "../index.css";
 
 // Define the ClockView class for managing the UI
 export class ClockView {
-
   private elementId: string;
   private controller: ClockController;
-  private incrementButton: HTMLElement ;
+  private incrementButton: HTMLElement;
+  private container: HTMLElement;
+  private timeElement: HTMLElement;
 
   constructor(elementId: string) {
     this.elementId = elementId;
@@ -15,76 +15,73 @@ export class ClockView {
     this.createButtonsElement();
   }
 
-  updateTimeInElement(timeString: string) { // Explicitly specifying the type as string
-    const element = document.getElementById(this.elementId);
-    if (element){
-      element.textContent = timeString;
+  updateTimeInElement(timeString: string) {
+    // Explicitly specifying the type as string
+    if (this.timeElement) {
+      this.timeElement.textContent = timeString;
     }
   }
 
-  displayTime(time: Date) { 
+  displayTime(time: Date) {
     this.updateTimeInElement(time.toLocaleTimeString());
   }
 
-  createClockElement(){
-    const container = document.querySelector("#clock-container");
-    const div = document.createElement("div");
-    div.setAttribute("id", this.elementId);
-    container.appendChild(div);
+  createClockElement() {
+    this.container = document.createElement("div");
+    this.container.setAttribute("id", this.elementId);
+    const mainContainer = document.querySelector("#main-container");
+    mainContainer.appendChild(this.container);
   }
-  createButtonsElement(){
-    const buttons = document.querySelector("#buttons");
-    const mode=document.createElement("button");
-    this.incrementButton=document.createElement("button");
+  createButtonsElement() {
+    this.timeElement = document.createElement("div");
+    this.container.appendChild(this.timeElement);
+    const buttons = document.createElement("div");
+    this.container.appendChild(buttons);
+
+    const modeButton = document.createElement("button");
+    this.incrementButton = document.createElement("button");
     const toggleTheme = document.createElement("button");
-    toggleTheme.setAttribute("id", "toggleTheme");
     toggleTheme.textContent = "Toggle Theme";
-    toggleTheme.addEventListener("click",()=>{
+    toggleTheme.addEventListener("click", () => {
       console.log("theme clicked");
       this.controller.handleToggleTheme();
     });
     toggleTheme.classList.add("light-off");
-    mode.setAttribute("id", "mode");
-    this.incrementButton.setAttribute("id", "increment");
     this.incrementButton.setAttribute("disabled", "");
-    mode.textContent = 'Mode';
-    this.incrementButton.textContent='Increment';
-    mode.addEventListener('click', () => {
-      // This function will be called when the button is clicked
-      console.log('Button clicked!');
+    modeButton.textContent = "Mode";
+    this.incrementButton.textContent = "Increment";
+    modeButton.addEventListener("click", () => {
       this.controller.handleModeClicked();
     });
-    this.incrementButton.addEventListener('click',()=>{
-      console.log('increment clicked!');
+    this.incrementButton.addEventListener("click", () => {
       this.controller.handleIncrement();
     });
-    buttons.appendChild(mode);
+    buttons.appendChild(modeButton);
     buttons.appendChild(this.incrementButton);
     buttons.appendChild(toggleTheme);
   }
 
-  changeIncrementButton(mode:0 | 1 | 2){
-    if (mode !== 0){
+  changeIncrementButton(mode: 0 | 1 | 2) {
+    if (mode !== 0) {
       this.incrementButton.removeAttribute("disabled");
     }
-    if (mode == 1){
-      this.incrementButton.textContent='Increment Hour';
+    if (mode == 1) {
+      this.incrementButton.textContent = "Increment Hour";
     }
-    if (mode == 2){
-      this.incrementButton.textContent='Increment Minute';
+    if (mode == 2) {
+      this.incrementButton.textContent = "Increment Minute";
     }
-    if (mode == 0){
-      this.incrementButton.textContent='Increment';
+    if (mode == 0) {
+      this.incrementButton.textContent = "Increment";
       this.incrementButton.setAttribute("disabled", "");
     }
   }
-  toggleTheme(light:boolean):void{
+  toggleTheme(light: boolean): void {
     const element = document.getElementById(this.elementId);
-    if (light){
+    if (light) {
       element.classList.remove("light-off");
       element.classList.add("light-on");
-    }
-    else{
+    } else {
       element.classList.remove("light-on");
       element.classList.add("light-off");
     }
@@ -93,7 +90,7 @@ export class ClockView {
     this.elementId = id;
     const div = document.getElementById(this.elementId);
     if (div) {
-        div.setAttribute("id", this.elementId);
+      div.setAttribute("id", this.elementId);
     }
   }
   setController(controller: ClockController): void {

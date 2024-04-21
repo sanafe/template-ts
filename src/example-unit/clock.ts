@@ -1,23 +1,21 @@
-import { ClockView } from './clock-view';
+import { ClockView } from "./clock-view";
 
 // Define the Clock class that includes the clock functionalities
 
 export class Clock {
-
   private clockView: ClockView;
   private time: Date;
   private mode: 0 | 1 | 2;
-  private light:boolean;
+  private light: boolean;
   private timeZoneOffset: number = 0; // default to UTC
   private timer: NodeJS.Timer;
 
-
   constructor(clockView: ClockView) {
     this.clockView = clockView;
-    this.setTimeZone(this.timeZoneOffset); // Initialize with default time zone
-    this.mode=0;
+    this.mode = 0;
     this.timer = null;
     this.setTime(new Date());
+    this.setTimeZone(this.timeZoneOffset);
   }
 
   setTime(time: Date): void {
@@ -37,40 +35,40 @@ export class Clock {
     }
   }
   setTimeZone(offset: number): void {
-    this.timeZoneOffset = offset;
-    // Here you would add logic to adjust the current time based on the new time zone
-    console.log(`Time zone set to UTC${offset >= 0 ? '+' : ''}${offset}`);
+    // Calculate the difference in minutes between the new offset and the current offset
+    const offsetDifference = (offset - this.timeZoneOffset) * 60;
+    this.timeZoneOffset = offset; // Update the stored time zone offset
+    // Update the current time by adding the offset difference
+    this.time = new Date(this.time.getTime() + offsetDifference * 60000); // 60000 ms per minute
+    this.clockView.displayTime(this.time);
+    console.log(`Time zone set to UTC${offset >= 0 ? "+" : ""}${offset}, current time updated.`);
   }
-    changeMode(): void {
-      this.mode++;
-      if (this.mode>2){
-        this.mode=0;
-      }
-      console.log(this.mode);
-      this.clockView.changeIncrementButton(this.mode as 0 | 1 | 2 );
+  changeMode(): void {
+    this.mode++;
+    if (this.mode > 2) {
+      this.mode = 0;
     }
-    increment(): void {
-      console.log('Increment method', this.mode);
-      console.log('time0 : ', this.time.getHours(), ':', this.time.getMinutes());
+    console.log(this.mode);
+    this.clockView.changeIncrementButton(this.mode as 0 | 1 | 2);
+  }
+  increment(): void {
+    if (this.mode === 1) {
+      this.incrementHour();
+    }
+    if (this.mode === 2) {
+      this.incrementMinute();
+    }
+    this.setTime(this.time);
+  }
+  incrementHour(): void {
+    this.time.setHours(this.time.getHours() + 1);
+  }
 
-      if (this.mode===1) {
-        this.incrementHour();
-      }
-      if (this.mode===2) {
-        this.incrementMinute();
-      }
-      console.log('time1: ', this.time.getHours(), ':', this.time.getMinutes());
-      this.setTime(this.time);
-    }
-    incrementHour(): void {
-      this.time.setHours(this.time.getHours() + 1);
-    }
-  
-    incrementMinute(): void {
-      this.time.setMinutes(this.time.getMinutes() + 1);
-    }
-    toggleTheme(): void {
-      this.light = !this.light;
-      this.clockView.toggleTheme(this.light);
-    }
+  incrementMinute(): void {
+    this.time.setMinutes(this.time.getMinutes() + 1);
+  }
+  toggleTheme(): void {
+    this.light = !this.light;
+    this.clockView.toggleTheme(this.light);
+  }
 }

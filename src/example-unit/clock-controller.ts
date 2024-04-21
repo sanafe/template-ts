@@ -7,13 +7,13 @@ export class ClockController {
   constructor(clock: Clock) {
     this.clock = clock;
   }
-  handleModeClicked(){
+  handleModeClicked() {
     this.clock.changeMode();
   }
-  handleIncrement(){
+  handleIncrement() {
     this.clock.increment();
-  };
-  handleToggleTheme(){
+  }
+  handleToggleTheme() {
     this.clock.toggleTheme();
-  };
+  }
 }
