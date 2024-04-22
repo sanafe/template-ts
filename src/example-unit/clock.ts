@@ -7,44 +7,56 @@ export class Clock {
   private time: Date;
   private mode: 0 | 1 | 2;
   private light: boolean;
-  private timeZoneOffset: number = 2; // default to UTC+2 Paris Time
+  private timeZoneOffset: number;
   private timer: NodeJS.Timer;
   private hour12Format: boolean;
 
-  constructor(clockView: ClockView) {
+  constructor(clockView: ClockView, timeZoneOffset?: number) {
     this.clockView = clockView;
     this.mode = 0;
     this.timer = null;
-    this.hour12Format = true; // AM / PM 
-    this.setTime(new Date());
-    this.setTimeZone(this.timeZoneOffset);
+    this.hour12Format = true; // AM / PM
+    this.light = true;
+    this.setTimeZone(timeZoneOffset || 1); // UTC+1 Paris Time
   }
 
-  setTime(time: Date): void {
-    this.time = time;
-
+  setTime(): void {
     if (this.timer !== null) {
       clearInterval(this.timer);
       this.timer = null;
     }
     // Update time every second
     if (this.timer === null) {
-      this.timer = setInterval(() => {
-        this.time = new Date(this.time);
+      const updateTime = () => {
         this.time.setSeconds(this.time.getSeconds() + 1);
         this.clockView.displayTime(this.time, this.hour12Format);
-      }, 1000);
+      };
+      // show time immediately
+      updateTime();
+      this.timer = setInterval(updateTime, 1000);
     }
   }
   setTimeZone(offset: number): void {
-    // Calculate the difference in minutes between the new offset and the current offset
-    const offsetDifference = (offset - this.timeZoneOffset) * 60;
     this.timeZoneOffset = offset; // Update the stored time zone offset
-    // Update the current time by adding the offset difference
-    this.time = new Date(this.time.getTime() + offsetDifference * 60000); // 60000 ms per minute
-    this.clockView.displayTime(this.time, this.hour12Format);
-    console.log(`Time zone set to UTC${offset >= 0 ? "+" : ""}${offset}, current time updated.`);
+    this.updateTimeForCurrentTimezone();
   }
+  updateTimeForCurrentTimezone(): void {
+    if (this.timeZoneOffset === undefined) {
+      return;
+    }
+    // Update the current time by adding the offset difference
+    const utcDate = this.getUtcTime();
+    this.time = new Date(utcDate.getTime() + this.timeZoneOffset * 60 * 60000); // 60 minutes per hour, 60000 ms per minute
+    this.setTime();
+    console.log(`Time zone set to UTC${this.timeZoneOffset >= 0 ? "+" : ""}${this.timeZoneOffset}, current time updated.`);
+  }
+
+  getUtcTime(): Date {
+    const now = new Date();
+    const utcTime = new Date(now.getTime() + now.getTimezoneOffset() * 60000);
+    return utcTime;
+  }
+  
   changeMode(): void {
     this.mode++;
     if (this.mode > 2) {
@@ -60,7 +72,7 @@ export class Clock {
     if (this.mode === 2) {
       this.incrementMinute();
     }
-    this.setTime(this.time);
+    this.setTime();
   }
   incrementHour(): void {
     this.time.setHours(this.time.getHours() + 1);
@@ -74,8 +86,7 @@ export class Clock {
     this.clockView.toggleTheme(this.light);
   }
   resetTime(): void {
-    this.time = new Date();
-    this.setTimeZone(this.timeZoneOffset);
+    this.updateTimeForCurrentTimezone();
   }
   toggleHour12Format(): void {
     this.hour12Format = !this.hour12Format;

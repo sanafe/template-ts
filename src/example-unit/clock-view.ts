@@ -34,6 +34,7 @@ export class ClockView {
   createClockElement() {
     this.container = document.createElement("div");
     this.container.setAttribute("id", this.elementId);
+    this.container.classList.add("clock");
     const mainContainer = document.querySelector("#main-container");
     mainContainer.appendChild(this.container);
   }
