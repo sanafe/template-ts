@@ -1,4 +1,6 @@
-
+body{
+  font-family:Arial, Helvetica, sans-serif
+}
 
 .light-on {
   color: black;
@@ -12,4 +14,14 @@
 
 .clock{
   border: 2px solid black;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px;
+}
+
+.clock button {
+background-color: azure;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 2px;
 }

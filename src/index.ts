@@ -1,14 +1,15 @@
+// Import the ClockManager class
 import { ClockManager } from "./example-unit/clock-manager";
 
-// main container for all clocks
+// Create the main container div to hold the clocks and other UI elements
 const container = document.createElement("div");
 container.setAttribute("id", "main-container");
 
-// dropdown for time zone selection
+// Create a select element for choosing time zones
 const timeZoneSelect = document.createElement("select");
 timeZoneSelect.setAttribute("id", "time-zone-select");
 
-// some common time zone options
+// Define common time zones with labels and corresponding UTC offsets
 const timeZones = [
     { label: "UTC-12", value: -12 },
     { label: "UTC-11", value: -11 },
@@ -37,24 +38,33 @@ const timeZones = [
     { label: "UTC+12", value: 12 },
 ];
 
+// Fill the time zone dropdown with options from the 'timeZones' array.
 timeZones.forEach(timeZone => {
     const option = document.createElement("option");
-    option.textContent = timeZone.label;
-    option.value = timeZone.value.toString();
-    timeZoneSelect.appendChild(option);
+    option.textContent = timeZone.label; // Set display text
+    option.value = timeZone.value.toString(); // Set the value of the option
+    timeZoneSelect.appendChild(option); // Add the option to the select element
 });
 
+// Add the dropdown to the main container
 container.appendChild(timeZoneSelect);
-timeZoneSelect.selectedIndex = 14;
-// Create a button to add clocks
+
+// Set the default selected time zone to UTC
+timeZoneSelect.selectedIndex = 14; // UTC (index 14 in the array)
+
+// Create a button for adding new clocks
 const addButton = document.createElement("button");
-addButton.textContent = "Add Clock";
+addButton.textContent = "Add Clock"; // Set button text
 addButton.addEventListener("click", () => {
+    // Create an instance of ClockManager when button is clicked
     const clockManager = new ClockManager();
+    // Retrieve the selected time zone offset from the dropdown
     const selectedTimeZoneOffset = parseInt(timeZoneSelect.value, 10);
+    // Use ClockManager to create a clock with the selected time zone
     clockManager.createClock(selectedTimeZoneOffset);
 });
+// Add the add clock button to the container
 container.appendChild(addButton);
 
-// Append the container to the document body
+// Append the main container to the document body
 document.body.appendChild(container);
