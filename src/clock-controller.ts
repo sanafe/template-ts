@@ -1,4 +1,3 @@
-// Import the Clock class from the "clock" module
 import { Clock } from "./clock";
 
 // Define the ClockController class to manage Clock instance interactions

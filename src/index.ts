@@ -1,5 +1,5 @@
 // Import the ClockManager class
-import { ClockManager } from "./example-unit/clock-manager";
+import { ClockManager } from "./clock-manager";
 
 // Create the main container div to hold the clocks and other UI elements
 const container = document.createElement("div");

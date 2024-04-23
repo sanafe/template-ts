@@ -1,6 +1,5 @@
-// Imports the ClockController class to manage clock logic and includes the main stylesheet for styling.
 import { ClockController } from "./clock-controller";
-import "../index.css";
+import "./index.css";
 
 // Define the ClockView class for managing the user interface of the clock application.
 export class ClockView {
@@ -18,24 +17,14 @@ export class ClockView {
   }
 
   // Updates the display of the clock time in the designated HTML element.
-  updateTimeInElement(timeString: string) {
+  private updateTimeInElement(timeString: string) {
     if (this.timeElement) {
       this.timeElement.textContent = timeString;
     }
   }
 
-  // Formats and displays the time based on the provided Date object and format preference.
-  displayTime(time: Date, hour12Format: boolean = true) {
-    this.updateTimeInElement(time.toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: hour12Format 
-    }));
-  }
-
   // Constructs the primary visual structure of the clock on the webpage.
-  createClockElement() {
+  private createClockElement() {
     this.container = document.createElement("div");
     this.container.setAttribute("id", this.elementId);
     this.container.classList.add("clock");
@@ -103,6 +92,16 @@ export class ClockView {
     this.createToggleHour12Button();
   }
 
+  // Formats and displays the time based on the provided Date object and format preference.
+  displayTime(time: Date, hour12Format: boolean = true) {
+    this.updateTimeInElement(time.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: hour12Format 
+    }));
+  }
+
   // Adjusts the increment button's state based on the selected mode.
   changeIncrementButton(mode: 0 | 1 | 2) {
     if (mode !== 0) {
@@ -129,15 +128,6 @@ export class ClockView {
     } else {
       element.classList.remove("light-on");
       element.classList.add("light-off");
-    }
-  }
-
-  // Sets a new ID for the clock's main HTML element.
-  setId(id: string): void {
-    this.elementId = id;
-    const div = document.getElementById(this.elementId);
-    if (div) {
-      div.setAttribute("id", this.elementId);
     }
   }
 

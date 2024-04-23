@@ -1,12 +1,11 @@
-// Import ClockView class
 import { ClockView } from "./clock-view";
 
-// Define the Clock class
+// Clock class - updates the view
 export class Clock {
   private clockView: ClockView; // Instance of ClockView to manage visual display
   private time: Date; // Current time
   private mode: 0 | 1 | 2; // Current mode of the clock (0: disable, 1: increment hour, 2: increment minute)
-  private light: boolean; // Theme of the clock (light or dark) Default to light
+  private light: boolean; // Theme of the clock (light or dark)
   private timeZoneOffset: number; // Time zone offset from UTC
   private timer: NodeJS.Timer; // Timer object for clock updates
   private hour12Format: boolean; // Format of the clock (12-hour or 24-hour)
@@ -21,7 +20,7 @@ export class Clock {
   }
 
   // Method to set the clock time updates
-  private setTime(): void {
+  private setTimer(): void {
     if (this.timer !== null) {
       clearInterval(this.timer); // Clear the existing timer
       this.timer = null; // Reset timer variable
@@ -47,7 +46,7 @@ export class Clock {
     if (this.timeZoneOffset === undefined) return;
     const utcDate = this.getUtcTime(); // Calculate current UTC time
     this.time = new Date(utcDate.getTime() + this.timeZoneOffset * 60 * 60000); // Adjust time according to the offset
-    this.setTime(); // Update the display
+    this.setTimer(); // Update the display
     console.log(`Time zone set to UTC${this.timeZoneOffset >= 0 ? "+" : ""}${this.timeZoneOffset}, current time updated.`);
   }
 
@@ -76,7 +75,7 @@ export class Clock {
     if (this.mode === 2) {
       this.incrementMinute();
     }
-    this.setTime();
+    this.setTimer();
   }
 
   // Helper method to increment hour

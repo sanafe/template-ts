@@ -1,4 +1,3 @@
-// clock-manager.ts
 import { Clock } from "./clock";
 import { ClockView } from "./clock-view";
 import { ClockController } from "./clock-controller";
@@ -13,11 +12,16 @@ export class ClockManager {
  * @param timeZoneOffset The offset, in hours, from UTC for the new clock.
  */
   createClock(timeZoneOffset: number): void {
-    const clockId = `clock-${Date.now()}`;
+    const clockId = this.generateClockId();
     const newClockView = new ClockView(clockId);
     const newClock = new Clock(newClockView, timeZoneOffset);
     const newClockController = new ClockController(newClock);
     newClockView.setController(newClockController);
     console.log("New clock added with ID:", clockId);
+  }
+
+  // generate a unique ID for each clock based on the current timestamp
+  generateClockId(): string {
+    return `clock-${Date.now()}`;
   }
 }
